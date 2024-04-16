@@ -29,3 +29,11 @@ DATA_INGESTION_DIR_NAME: str = "data_ingestion"
 DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store"
 DATA_INGESTION_INGESTED_DIR: str = "ingested"
 DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO: float = 0.2
+
+
+"""
+feature extraction related constant start with FEATURE_EXTRACTION VAR NAME
+"""
+FEATURE_EXTRACTION_DIR_NAME: str = "feature_extraction"
+FEATURE_EXTRACTION_EXTRACTED_DIR: str = "extracted"
+

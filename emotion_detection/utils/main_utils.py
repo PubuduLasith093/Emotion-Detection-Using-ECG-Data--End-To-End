@@ -6,6 +6,7 @@ import dill
 import yaml
 from pandas import DataFrame
 import pandas as pd
+import neurokit2 as nk
 
 from emotion_detection.exception import Emotion_detection_Exception
 from emotion_detection.logger import logging
@@ -147,3 +148,34 @@ def process_ecg_data_and_create_dataframe(self, data) -> DataFrame:
                 return ecg_df 
             except Exception as e:
                 raise Emotion_detection_Exception(e, sys) from e
+            
+def extract_features(self, df:DataFrame)-> DataFrame:
+    df['Baseline_Left'] = df['Baseline_Left'].apply(lambda x: np.array(x.split(','), dtype=int))
+    df['Stimuli_Left'] = df['Stimuli_Left'].apply(lambda x: np.array(x.split(','), dtype=int))
+    df['Baseline_Right'] = df['Baseline_Right'].apply(lambda x: np.array(x.split(','), dtype=int))
+    df['Stimuli_Right'] = df['Stimuli_Right'].apply(lambda x: np.array(x.split(','), dtype=int))
+    EXTRACTED_ECG_DF={}
+    try:
+        for i in range(df.shape[0]):
+            ecg_signals_b_l,info_b_l=nk.ecg_process(df.iloc[i]['Baseline_Left'],sampling_rate=256)
+            ecg_signals_s_l,info_s_l=nk.ecg_process(df.iloc[i]['Stimuli_Left'],sampling_rate=256)
+            ecg_signals_b_r,info_b_r=nk.ecg_process(df.iloc[i]['Baseline_Right'],sampling_rate=256)
+            ecg_signals_s_r,info_s_r=nk.ecg_process(df.iloc[i]['Stimuli_Right'],sampling_rate=256)
+            processed_ecg_l=nk.ecg_intervalrelated(ecg_signals_s_l)/nk.ecg_intervalrelated(ecg_signals_b_l)
+            processed_ecg_r=nk.ecg_intervalrelated(ecg_signals_s_r)/nk.ecg_intervalrelated(ecg_signals_b_r)
+            processed_ecg=(processed_ecg_l+processed_ecg_r)/2
+            processed_ecg['participent'] = df['Participant'][i]
+            processed_ecg['Video'] = df['Condition'][i]
+            processed_ecg['Valence'] = df['Valence_Binary'][i]
+            processed_ecg['Arousal'] = df['Arousal_Binary'][i]
+            processed_ecg['Dominance'] = df['Dominance_Binary'][i]
+            if not len(EXTRACTED_ECG_DF):
+                EXTRACTED_ECG_DF=processed_ecg
+            else:
+                EXTRACTED_ECG_DF=pd.concat([EXTRACTED_ECG_DF,processed_ecg],ignore_index=True)
+
+        cols = ['participent', 'Video'] + [col for col in EXTRACTED_ECG_DF.columns if col not in ['participent', 'Video']]
+        EXTRACTED_ECG_DF = EXTRACTED_ECG_DF[cols]
+        return EXTRACTED_ECG_DF
+    except Exception as e:
+        raise Emotion_detection_Exception(e, sys) from e

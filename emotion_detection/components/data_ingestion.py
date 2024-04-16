@@ -55,6 +55,15 @@ class DataIngestion:
 
         try:
             train_set, test_set = train_test_split(dataframe, test_size=self.data_ingestion_config.train_test_split_ratio)
+            train_set['Baseline_Left'] = train_set['Baseline_Left'].apply(lambda x: ','.join(map(str, x)))
+            train_set['Stimuli_Left'] = train_set['Stimuli_Left'].apply(lambda x: ','.join(map(str, x)))
+            train_set['Baseline_Right'] = train_set['Baseline_Right'].apply(lambda x: ','.join(map(str, x)))
+            train_set['Stimuli_Right'] = train_set['Stimuli_Right'].apply(lambda x: ','.join(map(str, x)))
+
+            test_set['Baseline_Left'] = test_set['Baseline_Left'].apply(lambda x: ','.join(map(str, x)))
+            test_set['Stimuli_Left'] = test_set['Stimuli_Left'].apply(lambda x: ','.join(map(str, x)))
+            test_set['Baseline_Right'] = test_set['Baseline_Right'].apply(lambda x: ','.join(map(str, x)))
+            test_set['Stimuli_Right'] = test_set['Stimuli_Right'].apply(lambda x: ','.join(map(str, x)))
             logging.info("Performed train test split on the dataframe")
             logging.info(
                 "Exited split_data_as_train_test method of Data_Ingestion class"
