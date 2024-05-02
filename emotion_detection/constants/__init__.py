@@ -7,6 +7,8 @@ ARTIFACT_DIR: str = "artifact"
 
 NO_OF_PARTICIPANTS = 23
 NO_OF_VIDEOS = 18
+# NO_OF_PARTICIPANTS = 6
+# NO_OF_VIDEOS = 18
 NO_OF_CLASSES = 3
 
 MODEL_FILE_NAME = "model.pkl"
@@ -36,4 +38,11 @@ feature extraction related constant start with FEATURE_EXTRACTION VAR NAME
 """
 FEATURE_EXTRACTION_DIR_NAME: str = "feature_extraction"
 FEATURE_EXTRACTION_EXTRACTED_DIR: str = "extracted"
+
+
+"""
+feature selection related constant start with FEATURE_SELECTION VAR NAME
+"""
+FEATURE_SELECTION_DIR_NAME: str = "feature_selection"
+FEATURE_SELECTION_EXTRACTED_DIR: str = "selected"
 

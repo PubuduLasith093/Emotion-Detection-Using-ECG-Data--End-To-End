@@ -4,6 +4,7 @@ from emotion_detection.logger import logging
 
 from emotion_detection.components.data_ingestion import DataIngestion
 from emotion_detection.components.feature_extraction import FeatureExtraction
+from emotion_detection.components.feature_selection import FeatureSelection
 
 # from emotion_detection.components.data_validation import DataValidation
 # from emotion_detection.components.data_transformation import DataTransformation
@@ -12,11 +13,13 @@ from emotion_detection.components.feature_extraction import FeatureExtraction
 # from emotion_detection.components.model_pusher import ModelPusher
 
 from emotion_detection.entity.config_entity import (DataIngestionConfig,
-                                                    FeatureExtrcationConfig)
+                                                    FeatureExtrcationConfig,
+                                                    FeatureSelectionConfig)
                                           
 
 from emotion_detection.entity.artifact_entity import (DataIngestionArtifact,
-                                                      FeatureExtractionArtifact)
+                                                      FeatureExtractionArtifact,
+                                                      FeatureSelectionArtifact)
 
 
 
@@ -24,6 +27,7 @@ class TrainPipeline:
     def __init__(self):
         self.data_ingestion_config = DataIngestionConfig()
         self.feature_extraction_config = FeatureExtrcationConfig()
+        self.feature_selection_config = FeatureSelectionConfig()
         # self.data_validation_config = DataValidationConfig()
         # self.data_transformation_config = DataTransformationConfig()
         # self.model_trainer_config = ModelTrainerConfig()
@@ -69,6 +73,30 @@ class TrainPipeline:
                 )
 
                 return feature_extraction_artifact
+
+            except Exception as e:
+                raise Emotion_detection_Exception(e, sys) from e
+            
+    def start_feature_selection(self, feature_extraction_artifact: FeatureExtractionArtifact) -> FeatureSelectionArtifact:
+            """
+            This method of TrainPipeline class is responsible for starting feature selection component
+            """
+            logging.info("Entered the start_feature_selection method of TrainPipeline class")
+
+            try:
+                feature_selecion = FeatureSelection(feature_extraction_artifact=feature_extraction_artifact,
+                                                feature_selection_config=self.feature_selection_config
+                                                )
+
+                feature_selection_artifact = feature_selecion.initiate_feature_selection()
+
+                logging.info("Performed the feature selection operation")
+
+                logging.info(
+                    "Exited the start_feature_selection method of TrainPipeline class"
+                )
+
+                return feature_selection_artifact
 
             except Exception as e:
                 raise Emotion_detection_Exception(e, sys) from e
@@ -160,6 +188,7 @@ class TrainPipeline:
             try:
                 data_ingestion_artifact = self.start_data_ingestion()
                 feature_extraction_artifact = self.start_feature_extraction(data_ingestion_artifact=data_ingestion_artifact)
+                feature_selection_artifact = self.start_feature_selection(feature_extraction_artifact=feature_extraction_artifact)
                 # data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
                 # data_transformation_artifact = self.start_data_transformation(
                 # data_ingestion_artifact=data_ingestion_artifact, data_validation_artifact=data_validation_artifact)

@@ -179,3 +179,10 @@ def extract_features(self, df:DataFrame)-> DataFrame:
         return EXTRACTED_ECG_DF
     except Exception as e:
         raise Emotion_detection_Exception(e, sys) from e
+    
+def select_features(self, df:DataFrame, selected_columns)-> DataFrame:
+    try:
+        selected_df = df[selected_columns]
+        return selected_df
+    except Exception as e:
+        raise Emotion_detection_Exception(e, sys) from e

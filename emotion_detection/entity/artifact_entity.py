@@ -10,3 +10,8 @@ class DataIngestionArtifact:
 class FeatureExtractionArtifact:
     trained_file_path:str 
     test_file_path:str 
+
+@dataclass
+class FeatureSelectionArtifact:
+    trained_file_path:str 
+    test_file_path:str

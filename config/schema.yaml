@@ -1,0 +1,17 @@
+columns:
+  - HRV_MeanNN: int
+  - HRV_MeanNN: int
+  - HRV_RCMSEn: int
+  - HRV_CD: int
+  - HRV_HFD: int
+  - HRV_KFD: int
+  
+
+selected_columns:
+  - HRV_MeanNN
+  - HRV_MeanNN
+  - HRV_RCMSEn
+  - HRV_CD
+  - HRV_HFD
+  - HRV_KFD
+  

@@ -27,4 +27,10 @@ class FeatureExtrcationConfig:
     feature_extraction_dir: str = os.path.join(training_pipeline_config.artifact_dir, FEATURE_EXTRACTION_DIR_NAME)
     training_file_path: str = os.path.join(feature_extraction_dir, FEATURE_EXTRACTION_EXTRACTED_DIR, TRAIN_FILE_NAME)
     testing_file_path: str = os.path.join(feature_extraction_dir, FEATURE_EXTRACTION_EXTRACTED_DIR, TEST_FILE_NAME)
+
+@dataclass
+class FeatureSelectionConfig:
+    feature_selection_dir: str = os.path.join(training_pipeline_config.artifact_dir, FEATURE_SELECTION_DIR_NAME)
+    training_file_path: str = os.path.join(feature_selection_dir, FEATURE_EXTRACTION_EXTRACTED_DIR, TRAIN_FILE_NAME)
+    testing_file_path: str = os.path.join(feature_selection_dir, FEATURE_EXTRACTION_EXTRACTED_DIR, TEST_FILE_NAME)
     
